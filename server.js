@@ -1,5 +1,5 @@
 // server.js
-
+require('dotenv').config();
 const express = require('express');
 const mysql = require('mysql2/promise');
 const cors = require('cors');
@@ -12,10 +12,10 @@ const port = 3000;
 // MySQL database configuration
 const pool = mysql.createPool({
   connectionLimit: 50, // Limit the number of simultaneous connections
-  host: 'bthtaa9yfsrz9p5amwtm-mysql.services.clever-cloud.com',
-  user: 'uzkyjw7rnkq4xkkp',
-  password: 'wSS7B2RxWvRMPkeR4HLD',
-  database: 'bthtaa9yfsrz9p5amwtm'
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME
 });
 
 // Middleware
