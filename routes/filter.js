@@ -1,0 +1,32 @@
+const express = require('express');
+const router = express.Router();
+
+module.exports = (pool) => {
+
+  router.post('/filter', async (req, res) => {
+    try {
+      const { tenthPercentage, diplomaOr12thPercentage, cgpa } = req.body;
+
+      const connection = await pool.getConnection();
+
+      const sql = `
+        SELECT * FROM details 
+        WHERE 
+          \`10 Percent\` >= ? AND 
+          \`Diploma / 12th Percentage\` >= ? AND 
+          CGPA >= ?
+      `;
+      const values = [tenthPercentage, diplomaOr12thPercentage, cgpa];
+
+      const [results] = await connection.query(sql, values);
+
+      connection.release();
+      res.status(200).json(results);
+    } catch (error) {
+      console.error('Error filtering data:', error);
+      res.status(500).json({ error: 'Error filtering data' });
+    }
+  });
+
+  return router;
+};

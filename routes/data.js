@@ -5,7 +5,7 @@ const router = express.Router();
 
 // Define routes that require MySQL pool
 module.exports = (pool) => {
-  // POST /data/insert
+
   router.post('/insert', async (req, res) => {
     try {
       const { RegisterNumber, Name, Email, Age } = req.body;
