@@ -8,13 +8,13 @@ const filterRouter = require('./routes/filter');
 const authRouter = require('./routes/auth/login');
 const detailsRouter = require('./routes/details');
 const authenticateToken = require('./routes/middlewares/authenticationToken');
-
+const profileRouter = require('./routes/profile');
 const app = express();
 const port = process.env.PORT || 5000;
 
 // MySQL database configuration
 const pool = mysql.createPool({
-  connectionLimit: 500,
+  connectionLimit: 50,
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
@@ -37,7 +37,7 @@ app.use('/auth', authRouter(pool));
 app.use('/data', authenticateToken, dataRouter(pool)); 
 app.use('/query', authenticateToken, filterRouter(pool));
 app.use('/info', authenticateToken, detailsRouter(pool));
-
+app.use('/profile', profileRouter(pool));
 // Start the server
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
