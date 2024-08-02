@@ -27,11 +27,7 @@ pool.on('enqueue', () => {
 });
 
 // Middleware
-app.use(cors({
-  origin: process.env.DOMAIN, // Replace with your frontend domain
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true // Enable to include credentials (cookies, authorization headers, etc.) with requests
-}));
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -42,13 +38,6 @@ app.use('/data', authenticateToken, dataRouter(pool));
 app.use('/query', filterRouter(pool));
 app.use('/info', authenticateToken, detailsRouter(pool));
 app.use('/profile', profileRouter(pool));
-
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send('Something broke!');
-});
-
 // Start the server
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
