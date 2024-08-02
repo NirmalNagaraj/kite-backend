@@ -35,7 +35,7 @@ app.use(cookieParser());
 // Routes
 app.use('/auth', authRouter(pool));
 app.use('/data', authenticateToken, dataRouter(pool)); 
-app.use('/query', authenticateToken, filterRouter(pool));
+app.use('/query', filterRouter(pool));
 app.use('/info', authenticateToken, detailsRouter(pool));
 app.use('/profile', profileRouter(pool));
 // Start the server
