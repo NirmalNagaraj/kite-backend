@@ -8,7 +8,11 @@ const filterRouter = require('./routes/filter');
 const authRouter = require('./routes/auth/login');
 const detailsRouter = require('./routes/details');
 const authenticateToken = require('./routes/middlewares/authenticationToken');
+const adminAuth = require('./routes/auth/adminLogin');
 const profileRouter = require('./routes/profile');
+const companyData = require('./routes/company');
+const configRouter = require('./routes/config');
+const adminAuthConfig = require('./routes/auth/adminPassword');
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -38,7 +42,11 @@ app.use('/data', authenticateToken, dataRouter(pool));
 app.use('/query', filterRouter(pool));
 app.use('/info', authenticateToken, detailsRouter(pool));
 app.use('/profile', profileRouter(pool));
+app.use('/auth',adminAuth(pool))
+app.use('/company',companyData(pool)); 
+app.use('/config',configRouter(pool));
+app.use('/auth',adminAuthConfig(pool));
 // Start the server
 app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
+  console.log(`Server running at http://localhost:${port}`);  
 });
