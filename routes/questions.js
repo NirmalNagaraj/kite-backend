@@ -20,17 +20,26 @@ module.exports = (pool) => {
   });
 
   // Retrieve questions by company name
-  router.get('/questions/:companyName', async (req, res) => {
-    const { companyName } = req.params;
-
+  router.get('/search', async (req, res) => {
+    const { companyName } = req.query;
+   
     try {
-      const [rows] = await pool.query('SELECT * FROM CompanyQuestions WHERE companyName = ?', [companyName]);
+      let query = 'SELECT * FROM CompanyQuestions';
+      const params = [];
+  
+      if (companyName) {
+        query += ' WHERE companyName = ?';
+        params.push(companyName);
+      }
+  
+      const [rows] = await pool.query(query, params);
       res.status(200).json(rows);
     } catch (error) {
       console.error('Error retrieving questions:', error);
       res.status(500).json({ error: 'Internal server error' });
     }
   });
+  
   router.get('/detail/:id', async (req, res) => {
     const { id } = req.params;
   

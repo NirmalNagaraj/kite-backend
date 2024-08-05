@@ -14,10 +14,10 @@ module.exports = (pool) => {
       res.status(500).json({ message: 'Server error', error: err.message });
     }
   });
-  router.post('/update-profile', async (req, res) => {
+  router.post('/update-profile', extractRegisterNumber, async (req, res) => {
     const { cgpa, historyOfArrears, currentBacklogs, skillset, otherDomain, resumeLink, githubLink, linkedinLink } = req.body;
-    const { registerNumber } = req;
-
+    const registerNumber = req.registerNumber;
+  
     try {
       await pool.query(
         'UPDATE details SET CGPA = ?, `History of Arrears` = ?, `Current Backlogs` = ?, `Skill Set` = ?, `Other Interested Domain` = ?, Resume = ?, Github = ?, Linkedin = ? WHERE `Register Number` = ?',

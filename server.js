@@ -14,12 +14,14 @@ const companyData = require('./routes/company');
 const configRouter = require('./routes/config');
 const adminAuthConfig = require('./routes/auth/adminPassword');
 const questionRouter = require('./routes/questions');
+const userAuthConfig = require('./routes/auth/userPassword');
 const app = express();
 const port = process.env.PORT || 5000;
 
 // MySQL database configuration
 const pool = mysql.createPool({
-  connectionLimit: 50,
+  connectionLimit: 10,
+  connectTimeout:10000,
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
@@ -48,6 +50,7 @@ app.use('/company',companyData(pool));
 app.use('/config',configRouter(pool));
 app.use('/auth',adminAuthConfig(pool));
 app.use('/questions',questionRouter(pool));
+app.use('/user',userAuthConfig(pool)); 
 // Start the server
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);  
