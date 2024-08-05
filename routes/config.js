@@ -28,6 +28,16 @@ module.exports = (pool) => {
       res.status(500).json({ error: 'Internal server error' });
     }
   });
+  router.get('/check-cgpa-editable', async (req, res) => {
+    try {
+      const [rows] = await pool.query('SELECT isAllow FROM config WHERE id = 1');
+      const isAllow = rows[0].isAllow;
+      res.json({ isAllow });
+    } catch (error) {
+      console.error('Error checking CGPA edit permission:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
 
   return router;
 };

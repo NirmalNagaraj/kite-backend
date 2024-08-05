@@ -14,6 +14,21 @@ module.exports = (pool) => {
       res.status(500).json({ message: 'Server error', error: err.message });
     }
   });
+  router.post('/update-profile', async (req, res) => {
+    const { cgpa, historyOfArrears, currentBacklogs, skillset, otherDomain, resumeLink, githubLink, linkedinLink } = req.body;
+    const { registerNumber } = req;
+
+    try {
+      await pool.query(
+        'UPDATE details SET CGPA = ?, `History of Arrears` = ?, `Current Backlogs` = ?, `Skill Set` = ?, `Other Interested Domain` = ?, Resume = ?, Github = ?, Linkedin = ? WHERE `Register Number` = ?',
+        [cgpa, historyOfArrears, currentBacklogs, skillset, otherDomain, resumeLink, githubLink, linkedinLink, registerNumber]
+      );
+      res.status(200).json({ message: 'Profile updated successfully' });
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
 
   return router;
 };

@@ -57,6 +57,18 @@ module.exports = (pool) => {
       res.status(500).json({ message: 'Internal server error' });
     }
   });
+  router.post('/add', async (req, res) => {
+    const { name, date, ctc, criteria,type, role, link } = req.body;
+
+    try {
+      const query = 'INSERT INTO Company (name, date, ctc, criteria,type, role, link) VALUES (?, ?, ?, ?, ?, ?, ?)';
+      await pool.query(query, [name, date, ctc, criteria,type, role, link]);
+      res.status(201).json({ success: true, message: 'Company added successfully!' });
+    } catch (error) {
+      console.error('Error adding company:', error);
+      res.status(500).json({ success: false, message: 'Error adding company' });
+    }
+  });
 
   return router;
 };
