@@ -7,7 +7,6 @@ module.exports = (pool) => {
   // Route to get upcoming company data
   router.get('/upcoming', extractRegisterNumber, async (req, res) => {
     const { registerNumber } = req;
-    console.log(registerNumber);
     
 
     try {
@@ -19,7 +18,7 @@ module.exports = (pool) => {
       }
 
       const studentCGPA = studentRows[0].CGPA;
-      console.log(studentCGPA);
+  
       
 
       // Query to get upcoming companies with criteria filtering
