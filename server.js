@@ -15,6 +15,7 @@ const configRouter = require('./routes/config');
 const adminAuthConfig = require('./routes/auth/adminPassword');
 const questionRouter = require('./routes/questions');
 const userAuthConfig = require('./routes/auth/userPassword');
+const analyticsRouter = require('./routes/analytics');
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -51,6 +52,7 @@ app.use('/config',configRouter(pool));
 app.use('/auth',adminAuthConfig(pool));
 app.use('/questions',questionRouter(pool));
 app.use('/user',userAuthConfig(pool)); 
+app.use('/analytics',analyticsRouter(pool));
 // Start the server
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);  
