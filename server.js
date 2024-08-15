@@ -11,23 +11,24 @@ const authenticateToken = require('./routes/middlewares/authenticationToken');
 const adminAuth = require('./routes/auth/adminLogin');
 const profileRouter = require('./routes/profile');
 const companyData = require('./routes/company');
-const configRouter = require('./routes/config');
+const configRouter = require('./routes/config'); 
 const adminAuthConfig = require('./routes/auth/adminPassword');
 const questionRouter = require('./routes/questions');
 const userAuthConfig = require('./routes/auth/userPassword');
 const analyticsRouter = require('./routes/analytics');
+const compilerRouter = require('./routes/compiler');
 const app = express();
 const port = process.env.PORT || 5000;
 
 // MySQL database configuration
 const pool = mysql.createPool({
-  connectionLimit: 100, 
+  connectionLimit: 1000, 
   connectTimeout: 10000,
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  waitForConnections: true,
+  waitForConnections: true, 
   queueLimit: 0,
 });
 
@@ -67,14 +68,15 @@ app.use('/auth', authRouter(pool));
 app.use('/data', authenticateToken, dataRouter(pool)); 
 app.use('/query', filterRouter(pool));
 app.use('/info', authenticateToken, detailsRouter(pool));
-app.use('/profile', profileRouter(pool));
+app.use('/profile', profileRouter(pool)); 
 app.use('/auth', adminAuth(pool));
 app.use('/company', companyData(pool)); 
 app.use('/config', configRouter(pool));
-app.use('/auth', adminAuthConfig(pool));
+app.use('/auth', adminAuthConfig(pool)); 
 app.use('/questions', questionRouter(pool));
 app.use('/user', userAuthConfig(pool)); 
 app.use('/analytics', analyticsRouter(pool));
+app.use('/',compilerRouter(pool));
 
 // Global error handling middleware
 app.use((err, req, res, next) => {
