@@ -26,6 +26,22 @@ module.exports = (pool) => {
       res.status(500).json({ error: 'Error compiling code' });
     }
   });
+  router.get('/get-question/:id', async (req, res) => {
+    const problemId = req.params.id;
+  
+    try {
+      const [rows] = await pool.query('SELECT * FROM Problems WHERE ProblemID = ?', [problemId]);
+  
+      if (rows.length === 0) {
+        return res.status(404).json({ message: 'Problem not found' });
+      }
+  
+      res.json(rows[0]); // Send the problem data back as JSON
+    } catch (error) {
+      console.error('Error fetching problem:', error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  });
 
   return router;
 };

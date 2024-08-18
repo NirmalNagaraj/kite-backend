@@ -16,14 +16,16 @@ const adminAuthConfig = require('./routes/auth/adminPassword');
 const questionRouter = require('./routes/questions');
 const userAuthConfig = require('./routes/auth/userPassword');
 const analyticsRouter = require('./routes/analytics');
-const compilerRouter = require('./routes/compiler');
+const isMentorRouter = require('./routes/auth/isMentor');
+const problemRouter = require('./routes/problem');
+const compilerRouter = require('./routes/compiler')
 const app = express();
 const port = process.env.PORT || 5000;
 
 // MySQL database configuration
 const pool = mysql.createPool({
   connectionLimit: 1000, 
-  connectTimeout: 10000,
+  connectTimeout: 60000,
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
@@ -40,7 +42,7 @@ pool.on('enqueue', () => {
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: true })); 
 app.use(cookieParser());
 
 // Middleware to handle MySQL disconnections and acquire a connection
@@ -76,15 +78,16 @@ app.use('/auth', adminAuthConfig(pool));
 app.use('/questions', questionRouter(pool));
 app.use('/user', userAuthConfig(pool)); 
 app.use('/analytics', analyticsRouter(pool));
-app.use('/',compilerRouter(pool));
-
+app.use('/mentor',isMentorRouter(pool));
+app.use('/problems',problemRouter(pool));
+app.use('/',compilerRouter(pool)); 
 // Global error handling middleware
 app.use((err, req, res, next) => {
   console.error('Global error handler:', err);
   res.status(500).send('Internal Server Error');
 });
 
-// Start the server
+// Start the server 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
