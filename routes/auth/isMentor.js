@@ -4,11 +4,11 @@ const extractRegisterNumber = require('../middlewares/extractRegisterNumber'); /
 
 module.exports = (pool) => {
 
-  // Route to check whether the registerNumber has isMentor field set to true
+  // Route to check whether the registerNumber has isMentor field set to true.
   router.get('/check/isMentor', extractRegisterNumber, async (req, res) => {
     const { registerNumber } = req;
 
-    try {
+    try { 
       // Query to check the value of isMentor
       const query = 'SELECT isMentor FROM details WHERE `Register Number` = ?';
       
