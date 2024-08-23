@@ -1,6 +1,7 @@
 const express = require('express');
 const mysql = require('mysql2/promise');
 const cors = require('cors');
+const fs = require('fs');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const dataRouter = require('./routes/data');
@@ -27,12 +28,18 @@ const pool = mysql.createPool({
   connectionLimit: 1000, 
   connectTimeout: 60000, 
   host: process.env.DB_HOST,
-  user: process.env.DB_USER,
+  user: process.env.DB_USER,  
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
+  port: process.env.DB_PORT,
   waitForConnections: true,  
   queueLimit: 0,
-});
+  ssl: {
+    rejectUnauthorized: false, // Disable certificate verification
+    ca: process.env.DB_CA_CERT // Path to your CA certificate
+  }
+}); 
+
 
 // Handle MySQL connection queue full 
 pool.on('enqueue', () => {
@@ -65,7 +72,7 @@ app.use((req, res, next) => {
 });
 
 // Routes
-app.use('/auth', authRouter(pool));
+app.use('/auth', authRouter);
 app.use('/data', authenticateToken, dataRouter(pool)); 
 app.use('/query', filterRouter(pool));
 app.use('/info', authenticateToken, detailsRouter(pool));
@@ -75,7 +82,7 @@ app.use('/company', companyData(pool));
 app.use('/config', configRouter(pool));
 app.use('/auth', adminAuthConfig(pool)); 
 app.use('/questions', questionRouter(pool));
-app.use('/user', userAuthConfig(pool)); 
+app.use('/user', userAuthConfig(pool));  
 app.use('/analytics', analyticsRouter(pool));
 app.use('/mentor',isMentorRouter(pool));
 app.use('/problems',problemRouter(pool));
