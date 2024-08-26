@@ -42,7 +42,13 @@ pool.on('enqueue', () => {
   console.warn('Warning: MySQL connection pool queue is filling up. Consider increasing the connection limit.');
 });
 
-app.use(cors())
+// app.use(cors())
+app.use(cors({
+  origin: process.env.DOMAIN, // Replace with your frontend URL
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); 
 app.use(cookieParser()); 
