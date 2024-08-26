@@ -43,16 +43,11 @@ pool.on('enqueue', () => {
   console.warn('Warning: MySQL connection pool queue is filling up. Consider increasing the connection limit.');
 });
 
-const corsOptions = {
-  origin: process.env.DOMAIN, // Use the environment variable
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true, // Allow cookies or HTTP Auth headers if needed
-};
-
-// Apply CORS middleware with the configured options
-app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));
+app.use(cors({
+  origin: '*', // or specify your allowed origins here
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); 
 app.use(cookieParser()); 
