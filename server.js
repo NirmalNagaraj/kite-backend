@@ -22,6 +22,7 @@ const problemRouter = require('./routes/problem');
 const compilerRouter = require('./routes/compiler')
 const app = express();
 const port = process.env.PORT || 5000;
+require('dotenv').config;
  
 // MySQL database configuration
 const pool = mysql.createPool({
@@ -42,8 +43,16 @@ pool.on('enqueue', () => {
   console.warn('Warning: MySQL connection pool queue is filling up. Consider increasing the connection limit.');
 });
 
-// app.use(cors())
-app.use(cors());
+const corsOptions = {
+  origin: process.env.DOMAIN, // Use the environment variable
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true, // Allow cookies or HTTP Auth headers if needed
+};
+
+// Apply CORS middleware with the configured options
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); 
 app.use(cookieParser()); 
