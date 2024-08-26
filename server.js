@@ -43,12 +43,7 @@ pool.on('enqueue', () => {
 });
 
 // app.use(cors())
-app.use(cors({
-  origin: process.env.DOMAIN, // Replace with your frontend URL
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true,
-}));
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); 
 app.use(cookieParser()); 

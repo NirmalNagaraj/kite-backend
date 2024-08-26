@@ -33,6 +33,16 @@ module.exports = (pool) => {
       res.status(500).json({ error: 'Internal server error' });
     }
   });
+  router.get('/all', async (req,res) => {
+    try{
+      const [rows] = await pool.query('SELECT * FROM Company');
+      res.status(200).json(rows);
+
+    }catch(err){
+      console.error("Error querying database:",err);
+      res.status(500).json({error: 'Internal Server error'});
+    }
+  })
   router.get('/upcoming-companies', async (req, res) => {
     try {
       // Query to get companies with date >= CURDATE()
